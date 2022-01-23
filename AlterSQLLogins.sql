@@ -6,7 +6,7 @@ SELECT @@SERVERNAME AS ServerName,
                                                 CONVERT(int,LOGINPROPERTY(SL.name, 'PasswordLastSetTime'))), 101),'Never Expire') AS PasswordExpirationDate,
         CASE WHEN is_expiration_checked = 1 THEN 'TRUE' ELSE 'FALSE' END AS PasswordExpireChecked
  FROM sys.sql_logins AS SL
- WHERE SL.name NOT LIKE '##%' AND SL.name NOT LIKE 'endPointUser' and is disabled = 0
+ WHERE SL.name NOT LIKE '##%' AND SL.name NOT LIKE 'endPointUser' and is_disabled = 0
  ORDER BY (LOGINPROPERTY(SL.name,'PasswordLastSetTime')) DESC
  
  SET NOCOUNT ON
@@ -19,9 +19,9 @@ SELECT @@SERVERNAME AS ServerName,
  ' ,DEFAULT LANGUAGE=['+P.default_language_name +']'+
  ' ,CHECK POLICY= OFF' +
  ' , CHECK EXPIRATION= OFF' 
- FROM sys.server principals p
+ FROM sys.server_principals p
  LEFT JOIN sys.sql_logins L ON P.sid = L.sid
- WHERE P.type = 'S' AND P.name NOT LIKE '##%##' AND p.is disabled=0 
+ WHERE P.type = 'S' AND P.name NOT LIKE '##%##' AND p.is_disabled=0 
  ORDER BY P.name
  
  /*SET Check policy ON, check expiration ON*/
